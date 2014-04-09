@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^3.5.1",
-    "twit": "^1.1.13"
+    "twit": "^1.1.13",
+    "cors": "^2.2.0"
   }
 }

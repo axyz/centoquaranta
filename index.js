@@ -1,6 +1,7 @@
 var express = require('express')
 var app = express()
 var Twit = require('twit')
+var cors = require('cors')
 
 var T = new Twit({
     consumer_key:         'Gt2LU4uzSU2UDQmzNpnWLgxUh'
@@ -35,5 +36,6 @@ app.get('/test', function(req, res) {
   })
 })
 
+app.use(cors())
 var port = Number(process.env.PORT || 5000);
 var server = app.listen(port)
