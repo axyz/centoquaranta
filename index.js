@@ -20,6 +20,9 @@ function getList(user, slug, cb) {
   })
 }
 
+
+app.use(cors())
+
 app.get('/140/:list', function(req, res){
   getList('140Photography', req.params.list, function(err, reply) {
     if(!err) {
@@ -36,6 +39,5 @@ app.get('/test', function(req, res) {
   })
 })
 
-app.use(cors())
 var port = Number(process.env.PORT || 5000);
 var server = app.listen(port)
