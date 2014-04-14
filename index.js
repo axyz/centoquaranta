@@ -44,10 +44,9 @@ function getLists(user, cb) {
     }else {
       var ls = result.split(';').map(function(el) {
         var ris = {}
-        ris.user = {}
         var tmp = el.split(':')
         ris.slug = tmp[0]
-        ris.user.screen_name = tmp[1]
+        ris.name = tmp[1]
         return ris
       })
       cb(err, ls)
