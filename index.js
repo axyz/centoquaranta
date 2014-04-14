@@ -16,9 +16,19 @@ if (typeof process.env.REDIS_PASSWORD)
   R.auth(process.env.REDIS_PASSWORD);
 
 function getList(user, slug, cb) {
+  T.get('lists/statuses', {owner_screen_name: user, slug: slug}, function(err, reply) {
+    if(!err) {
+      cb(err, reply)
+    }else {
+      console.log(err)
+    }
+  })
+}
+
+function getLists(user, cb) {
   R.get('cqph:lists', function(err, result) {
     if(err || !result) {
-      T.get('lists/statuses', {owner_screen_name: user, slug: slug}, function(err, reply) {
+      T.get('lists/list', {user_id: user}, function(err, reply) {
         if(!err) {
           var cache = reply.map(function(el) {
             return el.slug + ':' + el.user.name
@@ -41,16 +51,6 @@ function getList(user, slug, cb) {
         return ris
       })
       cb(err, ls)
-    }
-  })
-}
-
-function getLists(user, cb) {
-  T.get('lists/list', {user_id: user}, function(err, reply) {
-    if(!err) {
-      cb(err, reply)
-    }else {
-      console.log(err)
     }
   })
 }
