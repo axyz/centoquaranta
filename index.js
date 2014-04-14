@@ -2,20 +2,45 @@ var express = require('express')
 var app = express()
 var Twit = require('twit')
 var cors = require('cors')
+var redis = require('redis')
 
 var T = new Twit({
-    consumer_key:         'Gt2LU4uzSU2UDQmzNpnWLgxUh'
-  , consumer_secret:      'Q9HGUaoXucn5qN1GrWQamo9jLLB2tajC4v3ky5mP9myDydjss0'
-  , access_token:         '12844042-2frcuR6prnJIrOaM2mCEVVCuvnWVrAY5utOAThtxK'
-  , access_token_secret:  'diaT5qLjCdFCSckc3cRsxsi6m5DVVxkoMbZAOTsLmJuIQ'
+    consumer_key:         process.env.TWITTER_CONSUMER_KEY
+  , consumer_secret:      process.env.TWITTER_CONSUMER_SECRET
+  , access_token:         process.env.TWITTER_ACCESS_TOKEN
+  , access_token_secret:  process.env.TWITTER_ACCESS_TOKEN_SECRET
 })
 
+var R = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
+if (typeof process.env.REDIS_PASSWORD)
+  client.auth(process.env.REDIS_PASSWORD);
+
 function getList(user, slug, cb) {
-  T.get('lists/statuses', {owner_screen_name: user, slug: slug}, function(err, reply) {
-    if(!err) {
-      cb(err, reply)
+  R.get('cqph:lists', function(err, result) {
+    if(err || !result) {
+      T.get('lists/statuses', {owner_screen_name: user, slug: slug}, function(err, reply) {
+        if(!err) {
+          var cache = reply.map(function(el) {
+            return el.slug + ':' + el.user.name
+          }).reduce(function(pred, curr) {
+              return pred + ';' + curr
+            })
+          R.setex('cqph:lists', 43200, cache)
+          cb(err, reply)
+        }else {
+          console.log(err)
+        }
+      })
     }else {
-      console.log(err)
+      var ls = result.split(';').map(function(el) {
+        var ris = {}
+        ris.user = {}
+        var tmp = el.split(':')
+        ris.slug = tmp[0]
+        ris.user.name = tmp[1]
+        return ris
+      })
+      cb(err, ls)
     }
   })
 }
