@@ -30,7 +30,9 @@ function getLists(user, cb) {
     if(err || !result) {
       T.get('lists/list', {user_id: user}, function(err, reply) {
         if(!err) {
-          var cache = reply.map(function(el) {
+          var cache = reply.filter(function(el) {
+            return el.user.screen.name === user ? true : false
+          }).map(function(el) {
             return el.slug + ':' + el.name
           }).reduce(function(pred, curr) {
               return pred + ';' + curr
