@@ -16,7 +16,7 @@ if (typeof process.env.REDIS_PASSWORD)
   R.auth(process.env.REDIS_PASSWORD);
 
 function getList(user, slug, cb) {
-  T.get('lists/statuses', {owner_screen_name: user, slug: slug, count: 100, include_entities: false }, function(err, reply) {
+  T.get('lists/statuses', {owner_screen_name: user, slug: slug, count: 25, include_entities: false }, function(err, reply) {
     if(!err) {
       cb(err, reply)
     }else {
