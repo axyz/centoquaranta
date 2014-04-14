@@ -31,7 +31,7 @@ function getLists(user, cb) {
       T.get('lists/list', {user_id: user}, function(err, reply) {
         if(!err) {
           var cache = reply.map(function(el) {
-            return el.slug + ':' + el.user.name
+            return el.slug + ':' + el.name
           }).reduce(function(pred, curr) {
               return pred + ';' + curr
             })
