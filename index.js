@@ -20,15 +20,34 @@ function getList(user, slug, cb) {
   })
 }
 
+function getLists(user, cb) {
+  T.get('lists/list', {user_id: user}, function(err, reply) {
+    if(!err) {
+      cb(err, reply)
+    }else {
+      console.log(err)
+    }
+  })
+}
 
 app.use(cors())
 
-app.get('/140/:list', function(req, res){
+app.get('/140/lists/:list', function(req, res){
   getList('140Photography', req.params.list, function(err, reply) {
     if(!err) {
       res.send(reply)
     }else {
-      console.log(err)
+      res.send(err)
+    }
+  })
+})
+
+app.get('/140/lists', function(req, res) {
+  getLists('140photography', function(err, reply) {
+    if(!err) {
+      res.send(reply)
+    }else {
+      res.send(err)
     }
   })
 })
