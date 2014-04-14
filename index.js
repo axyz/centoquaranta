@@ -13,7 +13,7 @@ var T = new Twit({
 
 var R = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
 if (typeof process.env.REDIS_PASSWORD)
-  client.auth(process.env.REDIS_PASSWORD);
+  R.auth(process.env.REDIS_PASSWORD);
 
 function getList(user, slug, cb) {
   R.get('cqph:lists', function(err, result) {
