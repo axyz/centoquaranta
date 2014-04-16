@@ -28,7 +28,14 @@ function getList(user, slug, cb) {
 function getListMembers(user, slug, cb) {
   R.get('cqph:lists:' + slug, function(err, result) {
     if(err || !result) {
-      cb('TO-DO: get list members from twitter REST API', result) //TO-DO
+      T.get('lists/members', {owner_id: user, slug: slug}, function(err, reply) {
+        if(!err){
+          var cache = reply
+          cb(err, reply)
+        }else {
+          cb(err, null)
+        }
+      })
     }else {
       cb(err, result)
     }
@@ -50,7 +57,7 @@ function getLists(user, cb) {
           R.setex('cqph:lists', 43200, cache)
           cb(err, reply)
         }else {
-          console.log(err)
+          cb(err, null)
         }
       })
     }else {
