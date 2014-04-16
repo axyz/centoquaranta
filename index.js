@@ -60,12 +60,13 @@ function getAllMembers(user, cb) {
     })
     var members = allLists.map(function(slug, i) {
       ris = []
-      var c = 0
+      var set = false
       getListMembers(user, slug, function(err, members) {
         ris.push(members)
-        c++
+        set = true
       })
-      if(c === 1) return ris
+      while(!set){}
+      if(set) return ris
     })
     cb(err, members)
   })
