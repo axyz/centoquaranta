@@ -58,13 +58,14 @@ function getAllMembers(user, cb) {
     var allLists = lists.map(function(el) {
       return el.slug
     })
-    var ris = []
-    for(var i=0; i<allLists.length; i++) {
-      getListMembers(user, allLists[i], function(err, members) {
+    var members = allLists.map(function(list, i) {
+      var ris = []
+      getListMembers(user, list, function(err, members) {
         ris.push(members)
       })
-      if(i === allLists.length -1) cb(err, ris)
-    }
+      if(i === allLists.length) return ris
+    })
+    cb(err, members)
   })
 }
 
