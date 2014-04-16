@@ -65,7 +65,6 @@ function getAllMembers(user, cb) {
         ris.push(members)
         set = true
       })
-      while(!set){}
       if(set) return ris
     })
     cb(err, members)
