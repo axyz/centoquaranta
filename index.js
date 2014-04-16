@@ -128,11 +128,14 @@ var server = app.listen(port)
 // web socket
 
 
-var io = require('socket.io').listen(server)
+//var io = require('socket.io').listen(server)
+
+var WebSocketServer = require('ws').Server
+var wss = new WebSocketServer({server: server});
 
 var stream = T.stream('statuses/sample')
 
-io.sockets.on('connection', function(socket) {
+wss.on('connection', function(socket) {
   stream.on('tweet', function(tweet) {
     socket.emit('info', {tweet: tweet})
   })
