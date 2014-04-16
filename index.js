@@ -42,7 +42,8 @@ function getListMembers(user, slug, cb) {
         }
       })
     }else {
-      var ls = result.split(';').map(function(el) {
+      var ls = {}
+      ls.users = result.split(';').map(function(el) {
         var ris = {}
         ris.id = el
         return ris
