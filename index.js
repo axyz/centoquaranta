@@ -63,8 +63,8 @@ function getAllMembers(user, cb) {
       getListMembers(user, allLists[i], function(err, members) {
         ris.push(members)
       })
+      if(i === allLists.length -1) cb(err, ris)
     }
-    cb(err, ris)
   })
 }
 
