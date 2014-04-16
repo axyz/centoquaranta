@@ -25,6 +25,16 @@ function getList(user, slug, cb) {
   })
 }
 
+function getListMembers(user, slug, cb) {
+  R.get('cqph:lists:' + slug, function(err, result) {
+    if(err || !result) {
+      cb('TO-DO: get list members from twitter REST API', result) //TO-DO
+    }else {
+      cb(err, result)
+    }
+  })
+}
+
 function getLists(user, cb) {
   R.get('cqph:lists', function(err, result) {
     if(err || !result) {
@@ -60,6 +70,16 @@ app.use(cors())
 
 app.get('/140/lists/:list', function(req, res){
   getList('140Photography', req.params.list, function(err, reply) {
+    if(!err) {
+      res.send(reply)
+    }else {
+      res.send(err)
+    }
+  })
+})
+
+app.get('140/lists/:list/members', function(req, res) {
+  getListMembers('140Photography', req.params.list, function(err, reply) {
     if(!err) {
       res.send(reply)
     }else {
