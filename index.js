@@ -28,7 +28,7 @@ function getList(user, slug, cb) {
 function getListMembers(user, slug, cb) {
   R.get('cqph:lists:' + slug, function(err, result) {
     if(err || !result) {
-      T.get('lists/members', {owner_id: user, slug: slug}, function(err, reply) {
+      T.get('lists/members', {owner_screen_name: user, slug: slug}, function(err, reply) {
         if(!err){
           var cache = reply
           cb(err, reply)
