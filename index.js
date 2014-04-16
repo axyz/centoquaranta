@@ -32,14 +32,22 @@ function getListMembers(user, slug, cb) {
         if(!err){
           var cache = reply.users.map(function(el) {
             return el.id
+          }).reduce(function(pred, curr) {
+            return pred + ';' + curr
           })
-          cb(err, cache)
+          R.setex('cqph:lists:' + slug, 21600, cache)
+          cb(err, reply)
         }else {
           cb(err, null)
         }
       })
     }else {
-      cb(err, result)
+      var ls = result.split(';').map(function(el) {
+        var ris = {}
+        ris.id = el
+        return ris
+      })
+      cb(err, ls)
     }
   })
 }
