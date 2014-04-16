@@ -136,7 +136,16 @@ var wss = new WebSocketServer({server: server});
 var stream = T.stream('statuses/sample')
 
 wss.on('connection', function(socket) {
+  var id = setInterval(function() {
+    ws.send(JSON.stringify(new Date()), function() {  });
+  }, 1000)
+
   stream.on('tweet', function(tweet) {
     socket.send(tweet)
+  })
+
+  ws.on('close', function() {
+    console.log('websocket connection close');
+    clearInterval(id);
   })
 })
