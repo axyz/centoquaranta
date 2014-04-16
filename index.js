@@ -137,6 +137,6 @@ var stream = T.stream('statuses/sample')
 
 wss.on('connection', function(socket) {
   stream.on('tweet', function(tweet) {
-    socket.emit('info', {tweet: tweet})
+    socket.send('info', {tweet: tweet})
   })
 })
