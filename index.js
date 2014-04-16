@@ -137,7 +137,7 @@ var wss = new WebSocketServer({server: server});
 
 wss.on('connection', function(socket) {
   stream.on('tweet', function(tweet) {
-    socket.send(JSON.stringify(tweet), function(err) {
+    socket.send('"' + JSON.stringify(tweet) + '"', function(err) {
       console.log(err)
     })
   })
