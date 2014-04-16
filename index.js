@@ -53,6 +53,16 @@ function getListMembers(user, slug, cb) {
   })
 }
 
+function getAllMembers(user, cb) {
+  getLists(user, function(err, lists) {
+    lists.map(function(el) {
+      getListMembers(user, el.slug, function(err, members) {
+        return members
+      })
+    })
+  })
+}
+
 function getLists(user, cb) {
   R.get('cqph:lists', function(err, result) {
     if(err || !result) {
@@ -117,8 +127,12 @@ app.get('/140/lists', function(req, res) {
 })
 
 app.get('/test', function(req, res) {
-  T.get('search/tweets', { q: 'banana since:2011-11-11', count: 100 }, function(err, reply) {
-    res.send(reply)
+ getAllMembers('140Photography', function(err, reply) {
+    if(!err) {
+      res.send(reply)
+    }else {
+      res.send(err)
+    }
   })
 })
 
