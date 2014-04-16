@@ -63,6 +63,7 @@ function getAllMembers(user, cb) {
       async.map(allLists, function(slug, callback) {
         getListMembers(user, slug, function(err, members) {
           if(!err) {
+            members = members.users.map(function(el) {return el.id}).reduce(function(pred, curr) {return pred + ',' + curr})
             callback(null, members)
           }else {
             console.log(err)
