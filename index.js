@@ -61,15 +61,13 @@ function getAllMembers(user, cb) {
         return el.slug
       })
       async.map(allLists, function(slug, callback) {
-        var ris = []
         getListMembers(user, slug, function(err, members) {
           if(!err) {
-            ris.push(members)
+            callback(null, members)
           }else {
             console.log(err)
           }
         })
-        callback(null, ris)
       }, function(err, result) {
         cb(err, result)
       })
