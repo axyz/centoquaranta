@@ -55,12 +55,10 @@ function getListMembers(user, slug, cb) {
 
 function getAllMembers(user, cb) {
   getLists(user, function(err, lists) {
-    var ris = lists.map(function(el) {
-      return getListMembers(user, el.slug, function(err, data) {
-        return data
-      })
+    var allLists = lists.map(function(el) {
+      return el.slug
     })
-    cb(err, ris)
+    cb(err, allLists)
   })
 }
 
