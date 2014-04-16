@@ -124,3 +124,16 @@ app.get('/test', function(req, res) {
 
 var port = Number(process.env.PORT || 5000);
 var server = app.listen(port)
+
+
+// web socket
+
+var io = require('socket.io').listen(server)
+
+var stream = T.stream('statuses/sample')
+
+io.sockets.on('connection', function(socket) {
+  stream.on('tweet', function(tweet) {
+    socket.emit('info', {tweet: tweet})
+  })
+})
