@@ -123,10 +123,10 @@ app.get('/test', function(req, res) {
 })
 
 var port = Number(process.env.PORT || 5000);
-//var server = app.listen(port)
-var server = http.createServer(app);
+var server = app.listen(port)
 
 // web socket
+
 
 var io = require('socket.io').listen(server)
 
