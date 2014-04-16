@@ -127,17 +127,16 @@ var server = app.listen(port)
 
 // web socket
 
+var stream = T.stream('statuses/filter', { track: 'mango' })
 
 //var io = require('socket.io').listen(server)
 
 var WebSocketServer = require('ws').Server
 var wss = new WebSocketServer({server: server});
 
-var stream = T.stream('statuses/sample')
 
 wss.on('connection', function(socket) {
-  //stream.on('tweet', function(tweet) {
-  //  socket.send(tweet)
-  //})
-  socket.send('hi there!')
+  stream.on('tweet', function(tweet) {
+    socket.send(tweet)
+  })
 })
