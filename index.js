@@ -30,8 +30,10 @@ function getListMembers(user, slug, cb) {
     if(err || !result) {
       T.get('lists/members', {owner_screen_name: user, slug: slug}, function(err, reply) {
         if(!err){
-          var cache = reply
-          cb(err, reply)
+          var cache = reply.users.map(function(el) {
+            return el.id
+          })
+          cb(err, cache)
         }else {
           cb(err, null)
         }
