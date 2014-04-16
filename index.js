@@ -55,25 +55,34 @@ function getListMembers(user, slug, cb) {
 }
 
 function getAllMembers(user, cb) {
-  getLists(user, function(err, lists) {
-    if(!err) {
-      var allLists = lists.map(function(el) {
-        return el.slug
+  R.get('cqph:' + user + 'allMembers', function(err, data) {
+    if(err || !data) {
+      getLists(user, function(err, lists) {
+        if(!err) {
+          var allLists = lists.map(function(el) {
+            return el.slug
+          })
+          async.map(allLists, function(slug, callback) {
+            getListMembers(user, slug, function(err, members) {
+              if(!err) {
+                members = members.users.map(function(el) {return el.id}).reduce(function(pred, curr) {return pred + ',' + curr})
+                callback(null, members)
+              }else {
+                console.log(err)
+              }
+            })
+          }, function(err, result) {
+            var csv = result.reduce(function(pred, curr) {return pred + ',' + curr})
+            R.setex('cqph:' + user + 'allMembers', 10800, csv)
+            cb(err, csv)
+          })
+        }else {
+          cb(err, null)
+        }
       })
-      async.map(allLists, function(slug, callback) {
-        getListMembers(user, slug, function(err, members) {
-          if(!err) {
-            members = members.users.map(function(el) {return el.id}).reduce(function(pred, curr) {return pred + ',' + curr})
-            callback(null, members)
-          }else {
-            console.log(err)
-          }
-        })
-      }, function(err, result) {
-        cb(err, result.reduce(function(pred, curr) {return pred + ',' + curr}))
-      })
+
     }else {
-      cb(err, null)
+      cb(err, data)
     }
   })
 }
