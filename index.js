@@ -65,7 +65,7 @@ function getAllMembers(user, cb) {
         ris.push(members)
         c++
       })
-      if(c === allLists.length-1) return ris
+      if(c === 1) return ris
     })
     cb(err, members)
   })
