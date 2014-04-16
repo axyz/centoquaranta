@@ -165,7 +165,11 @@ var server = app.listen(port)
 
 // web socket
 
-var stream = T.stream('statuses/filter', { track: 'mango' })
+var stream
+
+getAllMembers('140photography', function(err, members) {
+  stream = T.stream('statuses/filter', {follow: members})
+})
 
 //var io = require('socket.io').listen(server)
 
