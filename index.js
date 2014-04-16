@@ -70,7 +70,7 @@ function getAllMembers(user, cb) {
           }
         })
       }, function(err, result) {
-        cb(err, result)
+        cb(err, result.reduce(function(pred, curr) {return pred + ',' + curr}))
       })
     }else {
       cb(err, null)
