@@ -3,6 +3,7 @@ var app = express()
 var Twit = require('twit')
 var cors = require('cors')
 var redis = require('redis')
+var async = require('async')
 
 var T = new Twit({
     consumer_key:         process.env.TWITTER_CONSUMER_KEY
@@ -58,16 +59,15 @@ function getAllMembers(user, cb) {
     var allLists = lists.map(function(el) {
       return el.slug
     })
-    var members = allLists.map(function(slug, i) {
-      ris = []
-      var set = false
+    var members = async.map(allLists, function(slug) {
+      var ris = []
       getListMembers(user, slug, function(err, members) {
         ris.push(members)
-        set = true
       })
-      if(set) return ris
+      return ris
+    }, function(err, result) {
+      cb(err, result)
     })
-    cb(err, members)
   })
 }
 
