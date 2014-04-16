@@ -56,18 +56,26 @@ function getListMembers(user, slug, cb) {
 
 function getAllMembers(user, cb) {
   getLists(user, function(err, lists) {
-    var allLists = lists.map(function(el) {
-      return el.slug
-    })
-    var members = async.map(allLists, function(slug) {
-      var ris = []
-      getListMembers(user, slug, function(err, members) {
-        ris.push(members)
+    if(!err) {
+      var allLists = lists.map(function(el) {
+        return el.slug
       })
-      return ris
-    }, function(err, result) {
-      cb(err, result)
-    })
+      async.map(allLists, function(slug, callback) {
+        var ris = []
+        getListMembers(user, slug, function(err, members) {
+          if(!err) {
+            ris.push(members)
+          }else {
+            console.log(err)
+          }
+        })
+        callback(null, ris)
+      }, function(err, result) {
+        cb(err, result)
+      })
+    }else {
+      cb(err, null)
+    }
   })
 }
 
