@@ -171,8 +171,6 @@ getAllMembers('140photography', function(err, members) {
   stream = T.stream('statuses/filter', {follow: members})
 })
 
-//var io = require('socket.io').listen(server)
-
 var WebSocketServer = require('ws').Server
 var wss = new WebSocketServer({server: server});
 
