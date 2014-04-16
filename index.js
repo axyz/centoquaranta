@@ -78,7 +78,7 @@ app.get('/140/lists/:list', function(req, res){
   })
 })
 
-app.get('140/list/members/:list', function(req, res) {
+app.get('140/members/:list', function(req, res) {
   getListMembers('140Photography', req.params.list, function(err, reply) {
     if(!err) {
       res.send(reply)
