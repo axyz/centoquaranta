@@ -56,11 +56,9 @@ function getListMembers(user, slug, cb) {
 function getAllMembers(user, cb) {
   getLists(user, function(err, lists) {
     var ris = lists.map(function(el) {
-      var members
-      getListMembers(user, el.slug, function(err, data) {
-        members = data
+      return getListMembers(user, el.slug, function(err, data) {
+        return data
       })
-      return members
     })
     cb(err, ris)
   })
