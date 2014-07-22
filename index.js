@@ -123,22 +123,24 @@ function getInitialSet(user, slug, cb) {
     if(err || !result) {
       T.get('lists/statuses', {owner_screen_name: user, slug: slug}, function(err, reply) {
         if(!err) {
-          var cache = reply.map(function(el) {
+        /*  var cache = reply.map(function(el) {
             return el.text
           }).reduce(function(pred, curr) {
             return pred + '%#TWEET-SEPARATOR#%' + curr
-          })
-          R.setex('cqph:initialset:' + slug, 10800, cache)
+          })*/
+          R.setex('cqph:initialset:' + slug, 10800, JSON.stringify(cache))
           cb(err, reply)
         }else {
-          var set = result.split('%#TWEET-SEPARATOR#%').map(function(el)  {
+          /*var set = result.split('%#TWEET-SEPARATOR#%').map(function(el)  {
             var ris = {}
             ris.text = el
             return ris
-          })
-          cb(err, set)
+          })*/
+          cb(err, null)
         }
       })
+    }else {
+      cb(err, JSON.parse(result))
     }
   })
 }
