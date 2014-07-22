@@ -124,7 +124,7 @@ function getInitialSet(user, slug, cb) {
       T.get('lists/statuses', {owner_screen_name: user, slug: slug}, function(err, reply) {
         if(!err) {
           var cache = reply.reduce(function(pred, curr) {
-            return pred.toString() + '%#TWEET-SEPARATOR#%' + curr.toString()
+            return JSON.stringify(pred) + '%#TWEET-SEPARATOR#%' +JSON.stringify(curr)
           })
           R.setex('cqph:initialset' + slug, 10800, cache)
           cb(err, reply)
