@@ -131,7 +131,11 @@ function getInitialSet(user, slug, cb) {
           R.setex('cqph:initialset' + slug, 10800, cache)
           cb(err, reply)
         }else {
-          var set = result.split('%#TWEET-SEPARATOR#%')
+          var set = result.split('%#TWEET-SEPARATOR#%').map(function(el)  {
+            var ris = {}
+            ris.text = el
+            return ris
+          })
           cb(err, set)
         }
       })
