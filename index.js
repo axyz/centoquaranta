@@ -118,10 +118,39 @@ function getLists(user, cb) {
   })
 }
 
+function getInitialSet(user, slug, cb) {
+  R.get('cqph:initialset' + slug, function(err, result) {
+    if(err || !result) {
+      T.get('lists/statuses', {owner_screen_name: user, slug: slug}, function(err, reply) {
+        if(!err) {
+          var cache = reply.reduce(function(pred, curr) {
+            return pred + '%#TWEET-SEPARATOR#%' + curr
+          })
+          R.setex('cqph:initialset' + slug, 10800, cache)
+          cb(err, reply)
+        }else {
+          var set = result.split('%#TWEET-SEPARATOR#%')
+          cb(err, set)
+        }
+      })
+    }
+  })
+}
+
 app.use(cors())
 
 app.get('/140/lists/:list', function(req, res){
   getList('140Photography', req.params.list, function(err, reply) {
+    if(!err) {
+      res.send(reply)
+    }else {
+      res.send(err)
+    }
+  })
+})
+
+app.get('/140/lists/:list/initialset', function(req, res) {
+  getInitialSet('140Photography', req.params.list, function(err, reply) {
     if(!err) {
       res.send(reply)
     }else {
