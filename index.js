@@ -119,7 +119,7 @@ function getLists(user, cb) {
 }
 
 function getInitialSet(user, slug, cb) {
-  R.get('cqph:initialset' + slug, function(err, result) {
+  R.get('cqph:initialset:' + slug, function(err, result) {
     if(err || !result) {
       T.get('lists/statuses', {owner_screen_name: user, slug: slug}, function(err, reply) {
         if(!err) {
@@ -128,7 +128,7 @@ function getInitialSet(user, slug, cb) {
           }).reduce(function(pred, curr) {
             return pred + '%#TWEET-SEPARATOR#%' + curr
           })
-          R.setex('cqph:initialset' + slug, 10800, cache)
+          R.setex('cqph:initialset:' + slug, 10800, cache)
           cb(err, reply)
         }else {
           var set = result.split('%#TWEET-SEPARATOR#%').map(function(el)  {
